@@ -9,11 +9,13 @@ int menu = int.Parse(Console.ReadLine());
 if (menu == 1)
 {
     int answer = new Random().Next(1, 101);
+    int count = 0;
 
     while (true)
     {
         Console.Write("숫자를 입력하세요: ");
         int guess = int.Parse(Console.ReadLine());
+        count++;
 
         if (guess < answer)
         {
