@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 class Player
 {
@@ -21,6 +22,7 @@ class Player
         {
             enemy.hp = 0;
         }
+
         Console.WriteLine($"{name}의 공격!");
         Console.WriteLine($"{enemy.name}에게 {attackPower}의 데미지!");
         Console.WriteLine();
@@ -44,10 +46,12 @@ class Enemy
     public void Attack(Player player)
     {
         player.hp -= attackPower;
+
         if (player.hp < 0)
         {
             player.hp = 0;
         }
+
         Console.WriteLine($"{name}의 공격!");
         Console.WriteLine($"{player.name}에게 {attackPower}의 데미지!");
         Console.WriteLine();
@@ -58,6 +62,14 @@ class Enemy
 
 class Game
 {
+    public static void ShowStatus(Player player, Enemy enemy)
+    {
+        Console.WriteLine();
+        Console.WriteLine($"{player.name} hp : {player.hp}");
+        Console.WriteLine($"{enemy.name} hp : {enemy.hp}");
+        Console.WriteLine();
+    }
+
     public static void Main(string[] args)
     {
         Console.OutputEncoding = System.Text.Encoding.UTF8;
@@ -69,15 +81,23 @@ class Game
         string name = Console.ReadLine();
 
         Player player = new Player(name);
-        Enemy enemy = new Enemy("최연수", 100, 8);
+
+        List<Enemy> enemies = new List<Enemy>()
+        {
+            new Enemy("슬라임", 50, 5),
+            new Enemy("최연수", 120, 8),
+            new Enemy("롯데", 150, 10)
+        };
+
+        Random random = new Random();
+        int index = random.Next(enemies.Count);
+
+        Enemy enemy = enemies[index];
 
         Console.WriteLine();
         Console.WriteLine($"야생의 {enemy.name}이 나타났습니다!");
 
-        Console.WriteLine();
-        Console.WriteLine($"{player.name} hp : {player.hp}");
-        Console.WriteLine($"{enemy.name} hp : {enemy.hp}");
-        Console.WriteLine();
+        ShowStatus(player, enemy);
 
         while (true)
         {
@@ -94,11 +114,11 @@ class Game
                 Console.WriteLine();
 
                 player.Attack(enemy);
-                
-                if (enemy.hp <= 0) {
+
+                if (enemy.hp <= 0)
+                {
                     Console.WriteLine();
                     Console.WriteLine($"{enemy.name}을 쓰러뜨렸습니다!");
-                    enemy.hp = 0;
                     break;
                 }
 
@@ -109,17 +129,13 @@ class Game
                 if (player.hp <= 0)
                 {
                     Console.WriteLine();
-                    Console.WriteLine($"{player.name}을 쓰러뜨렸습니다!");
-                    player.hp = 0;
+                    Console.WriteLine($"{player.name}이 쓰러졌습니다!");
                     break;
                 }
             }
             else if (input == "2")
             {
-                Console.WriteLine();
-                Console.WriteLine($"{player.name} : {player.hp}");
-                Console.WriteLine($"{enemy.name} : {enemy.hp}");
-                Console.WriteLine();
+                ShowStatus(player, enemy);
             }
             else if (input == "3")
             {
@@ -134,4 +150,3 @@ class Game
         }
     }
 }
-
